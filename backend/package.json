@@ -4,15 +4,16 @@
   "description": "Backend API for personal portfolio site (Express + PostgreSQL via Prisma)",
   "main": "src/index.js",
   "type": "commonjs",
-  "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev --name init",
-    "prisma:deploy": "prisma migrate deploy",
-    "prisma:studio": "prisma studio",
-    "seed": "node prisma/seed.js"
-  },
+"scripts": {
+  "dev": "nodemon src/index.js",
+  "start": "node src/index.js",
+  "build": "prisma generate",
+  "prisma:generate": "prisma generate",
+  "prisma:migrate": "prisma migrate dev --name init",
+  "prisma:deploy": "prisma migrate deploy",
+  "prisma:studio": "prisma studio",
+  "seed": "node prisma/seed.js"
+},
   "dependencies": {
     "@prisma/client": "^5.19.1",
     "bcryptjs": "^2.4.3",
