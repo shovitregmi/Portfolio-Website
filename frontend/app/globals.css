@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark is the default theme (matches the original design).
+   ThemeToggle.js flips this by setting data-theme="light" on <html>. */
+:root {
+  --color-bg: 15 17 23;
+  --color-surface: 23 26 36;
+  --color-surface2: 30 34 48;
+  --color-border: 42 46 61;
+  --color-ink: 237 237 240;
+  --color-muted: 146 150 166;
+  --color-accent: 232 163 61;
+  --color-accent2: 79 209 197;
+}
+
+:root[data-theme="light"] {
+  --color-bg: 250 250 252;
+  --color-surface: 255 255 255;
+  --color-surface2: 243 244 248;
+  --color-border: 226 228 234;
+  --color-ink: 23 26 36;
+  --color-muted: 100 105 120;
+  --color-accent: 191 122 26;
+  --color-accent2: 13 133 122;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: rgb(var(--color-bg));
+  color: rgb(var(--color-ink));
+  background-image:
+    radial-gradient(
+      circle at 15% 0%,
+      rgb(var(--color-accent) / 0.08),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 85% 20%,
+      rgb(var(--color-accent2) / 0.06),
+      transparent 40%
+    );
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+::selection {
+  background-color: rgb(var(--color-accent));
+  color: rgb(var(--color-bg));
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--color-accent));
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.container-px {
+  @apply px-6 md:px-12 lg:px-20;
+}
+
+.section {
+  @apply container-px py-24 md:py-32 max-w-6xl mx-auto;
+}
+
+.eyebrow {
+  @apply font-mono text-xs uppercase tracking-[0.25em] text-accent;
+}
+
+.btn-primary {
+  @apply inline-flex items-center gap-2 rounded-md bg-accent px-5 py-3 font-medium text-bg transition hover:brightness-110 active:brightness-95;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center gap-2 rounded-md border border-border px-5 py-3 font-medium text-ink transition hover:border-accent hover:text-accent;
+}
+
+.card {
+  @apply rounded-lg border border-border bg-surface transition-colors;
+}
+
+.input {
+  @apply w-full rounded-md border border-border bg-surface2 px-4 py-3 text-ink placeholder:text-muted focus:border-accent outline-none transition;
+}
+
+.label {
+  @apply font-mono text-xs uppercase tracking-wider text-muted;
+}
+
+.pill {
+  @apply inline-flex items-center gap-1.5 rounded-full border border-border bg-surface2 px-3 py-1 font-mono text-xs text-muted;
+}

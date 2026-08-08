@@ -1,0 +1,85 @@
+// Prisma schema for the portfolio backend.
+// Run `npx prisma migrate dev --name init` after setting DATABASE_URL to create these tables.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Profile {
+  id           String   @id @default(cuid())
+  name         String   @default("Your Name")
+  title        String   @default("Full-Stack Developer")
+  tagline      String   @default("I build fast, reliable web apps from front to back.")
+  bio          String   @default("Write a short bio about yourself here. Talk about what you build, what you're learning, and what you're looking for.")
+  location     String   @default("Kathmandu, Nepal")
+  email        String   @default("you@example.com")
+  phone        String?
+  resumeUrl    String?
+  avatarUrl    String?
+  availability Boolean  @default(true)
+  githubUrl    String?
+  linkedinUrl  String?
+  instagramUrl String?
+  whatsappUrl  String?
+  updatedAt    DateTime @updatedAt
+}
+
+model Skill {
+  id        String   @id @default(cuid())
+  name      String
+  category  String   @default("General") // e.g. Frontend, Backend, Tools, Languages
+  level     Int      @default(70) // 0-100, used for a proficiency bar
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Project {
+  id           String   @id @default(cuid())
+  title        String
+  slug         String   @unique
+  summary      String
+  description  String
+  imageUrl     String?
+  tags         String[] @default([])
+  liveUrl      String?
+  repoUrl      String?
+  featured     Boolean  @default(false)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Certificate {
+  id         String    @id @default(cuid())
+  title      String
+  issuer     String
+  issueDate  DateTime?
+  credentialUrl String?
+  imageUrl   String?
+  order      Int       @default(0)
+  createdAt  DateTime  @default(now())
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
