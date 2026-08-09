@@ -20,65 +20,87 @@ import {
   SiCplusplus,
   SiPostman,
   SiVercel,
-  SiVisualstudiocode,
 } from "react-icons/si";
+
 import { FiCode } from "react-icons/fi";
 
 function normalize(name = "") {
-  return name.toLowerCase().replace(/[.\-_/\s]+/g, "");
+  return name.toLowerCase().replace(/[._\-/\s]+/g, "");
 }
 
 const ICON_MAP = {
   javascript: SiJavascript,
   js: SiJavascript,
+
   typescript: SiTypescript,
   ts: SiTypescript,
+
   react: SiReact,
   reactjs: SiReact,
+
   next: SiNextdotjs,
   nextjs: SiNextdotjs,
+
   node: SiNodedotjs,
   nodejs: SiNodedotjs,
+
   express: SiExpress,
   expressjs: SiExpress,
+
   nest: SiNestjs,
   nestjs: SiNestjs,
+
   mongodb: SiMongodb,
   mongo: SiMongodb,
   mongodbatlas: SiMongodb,
   mern: SiMongodb,
+
   postgresql: SiPostgresql,
   postgres: SiPostgresql,
+
   html: SiHtml5,
   html5: SiHtml5,
+
   css: SiCss3,
   css3: SiCss3,
+
   tailwind: SiTailwindcss,
   tailwindcss: SiTailwindcss,
+
   figma: SiFigma,
+
   git: SiGit,
   github: SiGithub,
+
   python: SiPython,
+
   tensorflow: SiTensorflow,
+
   opencv: SiOpencv,
+
   "c++": SiCplusplus,
   cpp: SiCplusplus,
   cc: SiCplusplus,
+
   postman: SiPostman,
+
   vercel: SiVercel,
-  vscode: SiVisualstudiocode,
-  visualstudiocode: SiVisualstudiocode,
+
+  // VS Code fallback because SiVisualstudiocode
+  // is not available in the installed react-icons version.
+  vscode: FiCode,
+  visualstudiocode: FiCode,
 };
 
-// Auto-detect an icon from a free-text name (used when no manual override
-// is set). Falls back to a generic code icon if nothing matches.
+// Auto-detect an icon from a free-text name.
+// Falls back to a generic code icon if nothing matches.
 export function getIcon(name) {
   return ICON_MAP[normalize(name)] || FiCode;
 }
 
-// The curated list shown in admin icon-picker dropdowns. `key` is what
-// gets stored in the database (Skill.icon / Project.tagIcons); `label` is
-// what the admin sees.
+// The curated list shown in admin icon-picker dropdowns.
+// `key` is what gets stored in the database (Skill.icon / Project.tagIcons);
+// `label` is what the admin sees.
 export const ICON_OPTIONS = [
   { key: "javascript", label: "JavaScript" },
   { key: "typescript", label: "TypeScript" },
