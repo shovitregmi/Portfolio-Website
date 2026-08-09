@@ -12,7 +12,7 @@ export default function StatusBar({ profile }) {
           hour: "2-digit",
           minute: "2-digit",
           timeZone: "Asia/Kathmandu",
-        })
+        }),
       );
     update();
     const interval = setInterval(update, 30_000);

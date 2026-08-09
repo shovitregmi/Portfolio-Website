@@ -7,6 +7,8 @@ import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import StatusBar from "@/components/StatusBar";
+import SectionDivider from "@/components/SectionDivider";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export const revalidate = 60;
 
@@ -32,6 +34,7 @@ export default async function HomePage() {
     title: "Full-Stack Developer",
     tagline: "I build fast, reliable web apps from front to back.",
     bio: "Connect the backend and this bio will come from your database.",
+    major: "BSc. CSIT",
     location: "Kathmandu, Nepal",
     email: "you@example.com",
     availability: true,
@@ -41,16 +44,20 @@ export default async function HomePage() {
 
   return (
     <>
-      <Nav profile={p} />
+      <Nav />
       <main>
         <Hero profile={p} />
-        <About profile={p} skills={skills} />
+        <About profile={p} skills={skills} projectsCount={projects.length} />
+        <SectionDivider />
         <Skills skills={skills} />
+        <SectionDivider />
         <Projects projects={projects} />
+        <SectionDivider />
         <Contact profile={p} />
       </main>
       <Footer profile={p} />
       <StatusBar profile={p} />
+      <ScrollToTop />
     </>
   );
 }

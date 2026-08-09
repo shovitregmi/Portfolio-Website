@@ -2,8 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
+import { ICON_OPTIONS } from "@/lib/icons";
 
-const empty = { name: "", category: "General", level: 70, order: 0 };
+const empty = {
+  name: "",
+  category: "General",
+  level: 70,
+  icon: "",
+  showInAbout: true,
+  order: 0,
+};
 
 export default function SkillsAdminPage() {
   const [skills, setSkills] = useState([]);
@@ -15,7 +23,11 @@ export default function SkillsAdminPage() {
 
   function load() {
     setLoading(true);
-    api.get("/skills").then(setSkills).catch((e) => setError(e.message)).finally(() => setLoading(false));
+    api
+      .get("/skills")
+      .then(setSkills)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
   }
 
   useEffect(load, []);
@@ -26,7 +38,11 @@ export default function SkillsAdminPage() {
 
   function startEdit(skill) {
     setEditingId(skill.id);
-    setForm(skill);
+    setForm({
+      ...skill,
+      icon: skill.icon || "",
+      showInAbout: skill.showInAbout !== false,
+    });
   }
 
   function resetForm() {
@@ -38,7 +54,11 @@ export default function SkillsAdminPage() {
     e.preventDefault();
     setSaving(true);
     setError("");
-    const payload = { ...form, level: Number(form.level), order: Number(form.order) || 0 };
+    const payload = {
+      ...form,
+      level: Number(form.level),
+      order: Number(form.order) || 0,
+    };
     try {
       if (editingId) {
         await api.put(`/skills/${editingId}`, payload);
@@ -71,19 +91,76 @@ export default function SkillsAdminPage() {
         {editingId ? "Edit skill" : "Add a skill"}
       </h1>
 
-      <form onSubmit={handleSubmit} className="card mt-6 grid gap-5 sm:grid-cols-4 p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="card mt-6 grid gap-5 sm:grid-cols-4 p-6"
+      >
         <div className="sm:col-span-2">
-          <label className="label" htmlFor="name">Name</label>
-          <input id="name" required className="input mt-2" value={form.name} onChange={(e) => update("name", e.target.value)} />
+          <label className="label" htmlFor="name">
+            Name
+          </label>
+          <input
+            id="name"
+            required
+            className="input mt-2"
+            value={form.name}
+            onChange={(e) => update("name", e.target.value)}
+          />
         </div>
         <div>
-          <label className="label" htmlFor="category">Category</label>
-          <input id="category" className="input mt-2" value={form.category} onChange={(e) => update("category", e.target.value)} />
+          <label className="label" htmlFor="category">
+            Category
+          </label>
+          <input
+            id="category"
+            className="input mt-2"
+            value={form.category}
+            onChange={(e) => update("category", e.target.value)}
+          />
         </div>
         <div>
-          <label className="label" htmlFor="level">Level (0-100)</label>
-          <input id="level" type="number" min="0" max="100" className="input mt-2" value={form.level} onChange={(e) => update("level", e.target.value)} />
+          <label className="label" htmlFor="level">
+            Level (0-100)
+          </label>
+          <input
+            id="level"
+            type="number"
+            min="0"
+            max="100"
+            className="input mt-2"
+            value={form.level}
+            onChange={(e) => update("level", e.target.value)}
+          />
         </div>
+
+        <div className="sm:col-span-4">
+          <label className="label" htmlFor="icon">
+            Icon (used in the About tag list)
+          </label>
+          <select
+            id="icon"
+            className="input mt-2"
+            value={form.icon}
+            onChange={(e) => update("icon", e.target.value)}
+          >
+            <option value="">Auto-detect from name</option>
+            {ICON_OPTIONS.map((opt) => (
+              <option key={opt.key} value={opt.key}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <label className="flex items-center gap-2 sm:col-span-4 text-sm">
+          <input
+            type="checkbox"
+            checked={!!form.showInAbout}
+            onChange={(e) => update("showInAbout", e.target.checked)}
+            className="h-4 w-4"
+          />
+          Show as an icon pill in the About section
+        </label>
 
         <div className="flex items-center gap-4 sm:col-span-4">
           <button type="submit" className="btn-primary" disabled={saving}>
@@ -94,7 +171,9 @@ export default function SkillsAdminPage() {
               Cancel
             </button>
           )}
-          {error && <span className="font-mono text-sm text-red-400">{error}</span>}
+          {error && (
+            <span className="font-mono text-sm text-red-400">{error}</span>
+          )}
         </div>
       </form>
 
@@ -104,22 +183,38 @@ export default function SkillsAdminPage() {
       ) : (
         <div className="mt-4 space-y-3">
           {skills.map((skill) => (
-            <div key={skill.id} className="card flex items-center justify-between gap-4 p-4">
+            <div
+              key={skill.id}
+              className="card flex items-center justify-between gap-4 p-4"
+            >
               <div>
                 <p className="font-medium">{skill.name}</p>
-                <p className="text-sm text-muted">{skill.category} &middot; {skill.level}%</p>
+                <p className="text-sm text-muted">
+                  {skill.category} &middot; {skill.level}%
+                  {skill.showInAbout && (
+                    <span className="ml-2 text-accent">&middot; in About</span>
+                  )}
+                </p>
               </div>
               <div className="flex shrink-0 gap-3">
-                <button onClick={() => startEdit(skill)} className="font-mono text-xs text-accent hover:underline">
+                <button
+                  onClick={() => startEdit(skill)}
+                  className="font-mono text-xs text-accent hover:underline"
+                >
                   Edit
                 </button>
-                <button onClick={() => handleDelete(skill.id)} className="font-mono text-xs text-red-400 hover:underline">
+                <button
+                  onClick={() => handleDelete(skill.id)}
+                  className="font-mono text-xs text-red-400 hover:underline"
+                >
                   Delete
                 </button>
               </div>
             </div>
           ))}
-          {skills.length === 0 && <p className="font-mono text-sm text-muted">No skills yet.</p>}
+          {skills.length === 0 && (
+            <p className="font-mono text-sm text-muted">No skills yet.</p>
+          )}
         </div>
       )}
     </div>

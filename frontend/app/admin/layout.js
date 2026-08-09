@@ -4,13 +4,21 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { api } from "@/lib/api";
+import ThemeToggle from "@/components/ThemeToggle";
+import {
+  FiGrid,
+  FiFolder,
+  FiAward,
+  FiMail,
+  FiExternalLink,
+  FiLogOut,
+} from "react-icons/fi";
 
 const navItems = [
-  { href: "/admin/dashboard", label: "Overview" },
-  { href: "/admin/projects", label: "Projects" },
-  { href: "/admin/skills", label: "Skills" },
-  { href: "/admin/certificates", label: "Certificates" },
-  { href: "/admin/messages", label: "Messages" },
+  { href: "/admin/dashboard", label: "Overview", Icon: FiGrid },
+  { href: "/admin/projects", label: "Projects", Icon: FiFolder },
+  { href: "/admin/skills", label: "Skills", Icon: FiAward },
+  { href: "/admin/messages", label: "Messages", Icon: FiMail },
 ];
 
 export default function AdminLayout({ children }) {
@@ -52,34 +60,45 @@ export default function AdminLayout({ children }) {
   return (
     <div className="min-h-screen bg-bg text-ink">
       <div className="flex min-h-screen">
-        <aside className="hidden w-56 shrink-0 border-r border-border bg-surface p-6 md:block">
-          <p className="font-display text-lg font-semibold">Admin</p>
-          <p className="mt-1 truncate font-mono text-xs text-muted">{admin.email}</p>
+        <aside className="hidden w-60 shrink-0 border-r border-border bg-surface p-6 md:flex md:flex-col">
+          <div className="flex items-center justify-between">
+            <p className="font-display text-lg font-semibold">Admin</p>
+            <ThemeToggle />
+          </div>
+          <p className="mt-1 truncate font-mono text-xs text-muted">
+            {admin.email}
+          </p>
 
           <nav className="mt-8 flex flex-col gap-1">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded-md px-3 py-2 text-sm transition ${
+                className={`flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition ${
                   pathname === item.href
                     ? "bg-surface2 text-accent"
                     : "text-muted hover:bg-surface2 hover:text-ink"
                 }`}
               >
+                <item.Icon size={15} />
                 {item.label}
               </Link>
             ))}
           </nav>
 
-          <div className="mt-10 flex flex-col gap-2">
-            <Link href="/" className="font-mono text-xs text-muted hover:text-ink">
-              &larr; View live site
+          <div className="mt-auto flex flex-col gap-1 pt-8">
+            <Link
+              href="/"
+              className="flex items-center gap-2.5 rounded-md px-3 py-2 font-mono text-xs text-muted transition hover:bg-surface2 hover:text-ink"
+            >
+              <FiExternalLink size={14} />
+              View live site
             </Link>
             <button
               onClick={handleLogout}
-              className="text-left font-mono text-xs text-muted hover:text-red-400"
+              className="flex items-center gap-2.5 rounded-md px-3 py-2 text-left font-mono text-xs text-muted transition hover:bg-surface2 hover:text-red-400"
             >
+              <FiLogOut size={14} />
               Log out
             </button>
           </div>

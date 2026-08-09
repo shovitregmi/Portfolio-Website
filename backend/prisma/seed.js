@@ -4,10 +4,28 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
+// Only these show as icon pills in the About section by default — the rest
+// still appear in the full Skills grid. Toggle any skill's "Show in About"
+// checkbox in the admin panel to change this later.
+const ABOUT_HIGHLIGHTS = new Set([
+  "React.js",
+  "Next.js",
+  "Node.js / Express.js",
+  "MongoDB",
+  "PostgreSQL",
+  "JavaScript",
+  "TypeScript",
+  "Python",
+  "Git / GitHub",
+  "TensorFlow",
+]);
+
 async function main() {
-  const adminEmail = (process.env.ADMIN_EMAIL || "you@example.com").toLowerCase().trim();
+  const adminEmail = (process.env.ADMIN_EMAIL || "you@example.com")
+    .toLowerCase()
+    .trim();
   const adminPassword = process.env.ADMIN_PASSWORD || "change-this-password";
-  const adminName = process.env.ADMIN_NAME || "Your Name";
+  const adminName = process.env.ADMIN_NAME || "Shovit Regmi";
 
   const passwordHash = await bcrypt.hash(adminPassword, 12);
 
@@ -24,8 +42,10 @@ async function main() {
       data: {
         name: adminName,
         title: "Full-Stack Developer",
-        tagline: "I build fast, reliable web apps from front to back.",
-        bio: "Write a short bio about yourself here. Talk about what you build, what you're learning, and what you're looking for. Swap this out from the admin dashboard any time.",
+        tagline:
+          "I turn ideas into modern digital experiences, combining clean code, thoughtful design, and full-stack development to solve real problems.",
+        bio: "I\u2019m a full-stack developer and Computer Science student based in Kathmandu, Nepal \ud83c\uddf3\ud83c\uddf5, passionate about turning ideas into useful, real-world applications. I care about clean code, thoughtful interfaces, and building things that actually solve problems.\n\nI\u2019m naturally curious and always learning\u2014whether I\u2019m exploring a new technology, improving an existing project, or figuring out a better way to build something. For me, every project is an opportunity to learn, build, and grow.",
+        major: "BSc. CSIT",
         location: "Kathmandu, Nepal",
         email: adminEmail,
         availability: true,
@@ -36,15 +56,45 @@ async function main() {
 
   const skillCount = await prisma.skill.count();
   if (skillCount === 0) {
-    await prisma.skill.createMany({
-      data: [
-        { name: "JavaScript", category: "Languages", level: 80, order: 0 },
-        { name: "React / Next.js", category: "Frontend", level: 75, order: 1 },
-        { name: "Node.js / Express", category: "Backend", level: 75, order: 2 },
-        { name: "PostgreSQL", category: "Backend", level: 65, order: 3 },
-        { name: "Git & GitHub", category: "Tools", level: 80, order: 4 },
-      ],
-    });
+    const skillRows = [
+      // Frontend
+      { name: "React.js", category: "Frontend", level: 90, order: 0 },
+      { name: "Next.js", category: "Frontend", level: 85, order: 1 },
+      { name: "HTML5", category: "Frontend", level: 95, order: 2 },
+      { name: "CSS3", category: "Frontend", level: 90, order: 3 },
+      { name: "Tailwind CSS", category: "Frontend", level: 80, order: 4 },
+      // Backend
+      {
+        name: "Node.js / Express.js",
+        category: "Backend",
+        level: 90,
+        order: 0,
+      },
+      { name: "NestJS", category: "Backend", level: 80, order: 1 },
+      { name: "REST APIs", category: "Backend", level: 85, order: 2 },
+      { name: "MongoDB", category: "Backend", level: 85, order: 3 },
+      { name: "PostgreSQL", category: "Backend", level: 70, order: 4 },
+      { name: "Mongoose", category: "Backend", level: 70, order: 5 },
+      { name: "JWT Authentication", category: "Backend", level: 70, order: 6 },
+      // Tools
+      { name: "Git / GitHub", category: "Tools", level: 85, order: 0 },
+      { name: "VS Code", category: "Tools", level: 90, order: 1 },
+      { name: "Postman", category: "Tools", level: 75, order: 2 },
+      { name: "MongoDB Atlas", category: "Tools", level: 80, order: 3 },
+      { name: "Vercel", category: "Tools", level: 80, order: 4 },
+      { name: "TensorFlow", category: "Tools", level: 55, order: 5 },
+      { name: "OpenCV", category: "Tools", level: 55, order: 6 },
+      // Languages
+      { name: "JavaScript", category: "Languages", level: 85, order: 0 },
+      { name: "TypeScript", category: "Languages", level: 75, order: 1 },
+      { name: "Python", category: "Languages", level: 65, order: 2 },
+      { name: "SQL", category: "Languages", level: 80, order: 3 },
+      { name: "C", category: "Languages", level: 75, order: 4 },
+      { name: "C++", category: "Languages", level: 75, order: 5 },
+      { name: "Java", category: "Languages", level: 60, order: 6 },
+    ].map((s) => ({ ...s, showInAbout: ABOUT_HIGHLIGHTS.has(s.name) }));
+
+    await prisma.skill.createMany({ data: skillRows });
     console.log("Placeholder skills created.");
   }
 
@@ -63,18 +113,6 @@ async function main() {
       },
     });
     console.log("Placeholder project created.");
-  }
-
-  const certCount = await prisma.certificate.count();
-  if (certCount === 0) {
-    await prisma.certificate.create({
-      data: {
-        title: "Sample Certificate",
-        issuer: "Course Provider",
-        order: 0,
-      },
-    });
-    console.log("Placeholder certificate created.");
   }
 }
 

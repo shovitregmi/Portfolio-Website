@@ -1,6 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./app/**/*.{js,jsx}", "./components/**/*.{js,jsx}"],
+  content: [
+    "./app/**/*.{js,jsx}",
+    "./components/**/*.{js,jsx}",
+  ],
   theme: {
     extend: {
       colors: {
@@ -11,6 +14,7 @@ module.exports = {
         ink: "rgb(var(--color-ink) / <alpha-value>)",
         muted: "rgb(var(--color-muted) / <alpha-value>)",
         accent: "rgb(var(--color-accent) / <alpha-value>)",
+        accentHover: "rgb(var(--color-accent-hover) / <alpha-value>)",
         accent2: "rgb(var(--color-accent2) / <alpha-value>)",
       },
       fontFamily: {

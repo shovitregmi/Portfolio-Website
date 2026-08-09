@@ -2,10 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
+import { ICON_OPTIONS } from "@/lib/icons";
 
 const empty = {
-  title: "", summary: "", description: "", imageUrl: "",
-  tags: "", liveUrl: "", repoUrl: "", featured: false, order: 0,
+  title: "",
+  summary: "",
+  description: "",
+  imageUrl: "",
+  tags: "",
+  tagIcons: {},
+  liveUrl: "",
+  repoUrl: "",
+  featured: false,
+  order: 0,
 };
 
 export default function ProjectsAdminPage() {
@@ -18,7 +27,11 @@ export default function ProjectsAdminPage() {
 
   function load() {
     setLoading(true);
-    api.get("/projects").then(setProjects).catch((e) => setError(e.message)).finally(() => setLoading(false));
+    api
+      .get("/projects")
+      .then(setProjects)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
   }
 
   useEffect(load, []);
@@ -27,11 +40,16 @@ export default function ProjectsAdminPage() {
     setForm((f) => ({ ...f, [key]: value }));
   }
 
+  function updateTagIcon(tagName, iconKey) {
+    setForm((f) => ({ ...f, tagIcons: { ...f.tagIcons, [tagName]: iconKey } }));
+  }
+
   function startEdit(project) {
     setEditingId(project.id);
     setForm({
       ...project,
       tags: (project.tags || []).join(", "),
+      tagIcons: project.tagIcons || {},
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -45,10 +63,20 @@ export default function ProjectsAdminPage() {
     e.preventDefault();
     setSaving(true);
     setError("");
+    const tagList = form.tags
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+    // Only keep tagIcons entries for tags that still exist, so removed tags don't linger.
+    const cleanedTagIcons = {};
+    tagList.forEach((tag) => {
+      if (form.tagIcons[tag]) cleanedTagIcons[tag] = form.tagIcons[tag];
+    });
     const payload = {
       ...form,
       order: Number(form.order) || 0,
-      tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
+      tags: tagList,
+      tagIcons: cleanedTagIcons,
     };
     try {
       if (editingId) {
@@ -75,6 +103,11 @@ export default function ProjectsAdminPage() {
     }
   }
 
+  const currentTags = form.tags
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
+
   return (
     <div>
       <p className="eyebrow">Projects</p>
@@ -82,54 +115,147 @@ export default function ProjectsAdminPage() {
         {editingId ? "Edit project" : "Add a project"}
       </h1>
 
-      <form onSubmit={handleSubmit} className="card mt-6 grid gap-5 p-6 sm:grid-cols-2">
+      <form
+        onSubmit={handleSubmit}
+        className="card mt-6 grid gap-5 p-6 sm:grid-cols-2"
+      >
         <div className="sm:col-span-2">
-          <label className="label" htmlFor="title">Title</label>
-          <input id="title" required className="input mt-2" value={form.title} onChange={(e) => update("title", e.target.value)} />
+          <label className="label" htmlFor="title">
+            Title
+          </label>
+          <input
+            id="title"
+            required
+            className="input mt-2"
+            value={form.title}
+            onChange={(e) => update("title", e.target.value)}
+          />
         </div>
         <div className="sm:col-span-2">
-          <label className="label" htmlFor="summary">Summary (one line)</label>
-          <input id="summary" required className="input mt-2" value={form.summary} onChange={(e) => update("summary", e.target.value)} />
-        </div>
-        <div className="sm:col-span-2">
-          <label className="label" htmlFor="description">Description</label>
-          <textarea id="description" required rows={4} className="input mt-2 resize-none" value={form.description} onChange={(e) => update("description", e.target.value)} />
-        </div>
-        <div>
-          <label className="label" htmlFor="imageUrl">Image URL</label>
-          <input id="imageUrl" className="input mt-2" value={form.imageUrl || ""} onChange={(e) => update("imageUrl", e.target.value)} />
-        </div>
-        <div>
-          <label className="label" htmlFor="tags">Tags (comma-separated)</label>
-          <input id="tags" className="input mt-2" value={form.tags} onChange={(e) => update("tags", e.target.value)} />
+          <label className="label" htmlFor="summary">
+            Summary (one line)
+          </label>
+          <input
+            id="summary"
+            required
+            className="input mt-2"
+            value={form.summary}
+            onChange={(e) => update("summary", e.target.value)}
+          />
         </div>
         <div>
-          <label className="label" htmlFor="liveUrl">Live URL</label>
-          <input id="liveUrl" className="input mt-2" value={form.liveUrl || ""} onChange={(e) => update("liveUrl", e.target.value)} />
+          <label className="label" htmlFor="imageUrl">
+            Image URL
+          </label>
+          <input
+            id="imageUrl"
+            className="input mt-2"
+            value={form.imageUrl || ""}
+            onChange={(e) => update("imageUrl", e.target.value)}
+          />
         </div>
         <div>
-          <label className="label" htmlFor="repoUrl">Repo URL</label>
-          <input id="repoUrl" className="input mt-2" value={form.repoUrl || ""} onChange={(e) => update("repoUrl", e.target.value)} />
+          <label className="label" htmlFor="tags">
+            Tags (comma-separated)
+          </label>
+          <input
+            id="tags"
+            className="input mt-2"
+            value={form.tags}
+            onChange={(e) => update("tags", e.target.value)}
+          />
+        </div>
+
+        {currentTags.length > 0 && (
+          <div className="sm:col-span-2">
+            <p className="label mb-2">
+              Tag icons (optional — leave on auto-detect if the name already
+              matches, e.g. "React")
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {currentTags.map((tag) => (
+                <div key={tag} className="flex items-center gap-3">
+                  <span className="w-28 shrink-0 truncate text-sm text-muted">
+                    {tag}
+                  </span>
+                  <select
+                    className="input"
+                    value={form.tagIcons[tag] || ""}
+                    onChange={(e) => updateTagIcon(tag, e.target.value)}
+                  >
+                    <option value="">Auto-detect</option>
+                    {ICON_OPTIONS.map((opt) => (
+                      <option key={opt.key} value={opt.key}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div>
+          <label className="label" htmlFor="liveUrl">
+            Live URL
+          </label>
+          <input
+            id="liveUrl"
+            className="input mt-2"
+            value={form.liveUrl || ""}
+            onChange={(e) => update("liveUrl", e.target.value)}
+          />
         </div>
         <div>
-          <label className="label" htmlFor="order">Display order</label>
-          <input id="order" type="number" className="input mt-2" value={form.order} onChange={(e) => update("order", e.target.value)} />
+          <label className="label" htmlFor="repoUrl">
+            Repo URL
+          </label>
+          <input
+            id="repoUrl"
+            className="input mt-2"
+            value={form.repoUrl || ""}
+            onChange={(e) => update("repoUrl", e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="label" htmlFor="order">
+            Display order
+          </label>
+          <input
+            id="order"
+            type="number"
+            className="input mt-2"
+            value={form.order}
+            onChange={(e) => update("order", e.target.value)}
+          />
         </div>
         <label className="flex items-center gap-2 self-end pb-3 text-sm">
-          <input type="checkbox" checked={!!form.featured} onChange={(e) => update("featured", e.target.checked)} className="h-4 w-4" />
+          <input
+            type="checkbox"
+            checked={!!form.featured}
+            onChange={(e) => update("featured", e.target.checked)}
+            className="h-4 w-4"
+          />
           Featured
         </label>
 
         <div className="flex items-center gap-4 sm:col-span-2">
           <button type="submit" className="btn-primary" disabled={saving}>
-            {saving ? "Saving..." : editingId ? "Update project" : "Add project"}
+            {saving
+              ? "Saving..."
+              : editingId
+                ? "Update project"
+                : "Add project"}
           </button>
           {editingId && (
             <button type="button" onClick={resetForm} className="btn-secondary">
               Cancel
             </button>
           )}
-          {error && <span className="font-mono text-sm text-red-400">{error}</span>}
+          {error && (
+            <span className="font-mono text-sm text-red-400">{error}</span>
+          )}
         </div>
       </form>
 
@@ -139,22 +265,33 @@ export default function ProjectsAdminPage() {
       ) : (
         <div className="mt-4 space-y-3">
           {projects.map((project) => (
-            <div key={project.id} className="card flex items-center justify-between gap-4 p-4">
+            <div
+              key={project.id}
+              className="card flex items-center justify-between gap-4 p-4"
+            >
               <div>
                 <p className="font-medium">{project.title}</p>
                 <p className="text-sm text-muted">{project.summary}</p>
               </div>
               <div className="flex shrink-0 gap-3">
-                <button onClick={() => startEdit(project)} className="font-mono text-xs text-accent hover:underline">
+                <button
+                  onClick={() => startEdit(project)}
+                  className="font-mono text-xs text-accent hover:underline"
+                >
                   Edit
                 </button>
-                <button onClick={() => handleDelete(project.id)} className="font-mono text-xs text-red-400 hover:underline">
+                <button
+                  onClick={() => handleDelete(project.id)}
+                  className="font-mono text-xs text-red-400 hover:underline"
+                >
                   Delete
                 </button>
               </div>
             </div>
           ))}
-          {projects.length === 0 && <p className="font-mono text-sm text-muted">No projects yet.</p>}
+          {projects.length === 0 && (
+            <p className="font-mono text-sm text-muted">No projects yet.</p>
+          )}
         </div>
       )}
     </div>

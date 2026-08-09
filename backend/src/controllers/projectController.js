@@ -38,7 +38,9 @@ async function listProjects(req, res, next) {
 
 async function getProject(req, res, next) {
   try {
-    const project = await prisma.project.findUnique({ where: { slug: req.params.slug } });
+    const project = await prisma.project.findUnique({
+      where: { slug: req.params.slug },
+    });
     if (!project) return res.status(404).json({ error: "Project not found." });
     res.json(project);
   } catch (err) {
@@ -48,9 +50,20 @@ async function getProject(req, res, next) {
 
 async function createProject(req, res, next) {
   try {
-    const { title, summary, description, imageUrl, tags, liveUrl, repoUrl, featured, order } = req.body;
-    if (!title || !summary || !description) {
-      return res.status(400).json({ error: "Title, summary, and description are required." });
+    const {
+      title,
+      summary,
+      description,
+      imageUrl,
+      tags,
+      tagIcons,
+      liveUrl,
+      repoUrl,
+      featured,
+      order,
+    } = req.body;
+    if (!title || !summary) {
+      return res.status(400).json({ error: "Title and summary are required." });
     }
 
     const slug = await uniqueSlug(title);
@@ -59,9 +72,10 @@ async function createProject(req, res, next) {
         title,
         slug,
         summary,
-        description,
+        description: description || summary,
         imageUrl,
         tags: Array.isArray(tags) ? tags : [],
+        tagIcons: tagIcons && typeof tagIcons === "object" ? tagIcons : {},
         liveUrl,
         repoUrl,
         featured: Boolean(featured),
@@ -76,14 +90,28 @@ async function createProject(req, res, next) {
 
 async function updateProject(req, res, next) {
   try {
-    const { id } = req.params;
-    const { title, summary, description, imageUrl, tags, liveUrl, repoUrl, featured, order } = req.body;
+    const id = Number(req.params.id);
+    const {
+      title,
+      summary,
+      description,
+      imageUrl,
+      tags,
+      tagIcons,
+      liveUrl,
+      repoUrl,
+      featured,
+      order,
+    } = req.body;
 
     const data = {
       ...(summary !== undefined && { summary }),
-      ...(description !== undefined && { description }),
+      ...(description !== undefined && { description: description || summary }),
       ...(imageUrl !== undefined && { imageUrl }),
       ...(tags !== undefined && { tags: Array.isArray(tags) ? tags : [] }),
+      ...(tagIcons !== undefined && {
+        tagIcons: tagIcons && typeof tagIcons === "object" ? tagIcons : {},
+      }),
       ...(liveUrl !== undefined && { liveUrl }),
       ...(repoUrl !== undefined && { repoUrl }),
       ...(featured !== undefined && { featured: Boolean(featured) }),
@@ -104,7 +132,7 @@ async function updateProject(req, res, next) {
 
 async function deleteProject(req, res, next) {
   try {
-    const { id } = req.params;
+    const id = Number(req.params.id);
     await prisma.project.delete({ where: { id } });
     res.json({ success: true });
   } catch (err) {
@@ -112,4 +140,10 @@ async function deleteProject(req, res, next) {
   }
 }
 
-module.exports = { listProjects, getProject, createProject, updateProject, deleteProject };
+module.exports = {
+  listProjects,
+  getProject,
+  createProject,
+  updateProject,
+  deleteProject,
+};

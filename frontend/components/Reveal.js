@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 
+// Wrap any section in <Reveal> to have it fade/slide in the first time it
+// scrolls into view. Works fine wrapping server-rendered content — the
+// children are just passed through, not re-executed on the client.
 export default function Reveal({ children, className = "" }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);

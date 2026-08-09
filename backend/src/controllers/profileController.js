@@ -20,9 +20,21 @@ async function updateProfile(req, res, next) {
   try {
     const profile = await getOrCreateProfile();
     const {
-      name, title, tagline, bio, location, email, phone,
-      resumeUrl, avatarUrl, availability,
-      githubUrl, linkedinUrl, instagramUrl, whatsappUrl,
+      name,
+      title,
+      tagline,
+      bio,
+      major,
+      location,
+      email,
+      phone,
+      resumeUrl,
+      avatarUrl,
+      availability,
+      githubUrl,
+      linkedinUrl,
+      instagramUrl,
+      whatsappUrl,
     } = req.body;
 
     const updated = await prisma.profile.update({
@@ -32,6 +44,7 @@ async function updateProfile(req, res, next) {
         ...(title !== undefined && { title }),
         ...(tagline !== undefined && { tagline }),
         ...(bio !== undefined && { bio }),
+        ...(major !== undefined && { major }),
         ...(location !== undefined && { location }),
         ...(email !== undefined && { email }),
         ...(phone !== undefined && { phone }),

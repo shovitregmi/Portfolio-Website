@@ -7,6 +7,7 @@ const fields = [
   { key: "name", label: "Name" },
   { key: "title", label: "Title" },
   { key: "tagline", label: "Tagline" },
+  { key: "major", label: "Major (shown in About stat card)" },
   { key: "location", label: "Location" },
   { key: "email", label: "Contact email" },
   { key: "phone", label: "Phone (optional)" },
@@ -58,7 +59,11 @@ export default function DashboardPage() {
   }
 
   if (!profile) {
-    return <p className="font-mono text-sm text-red-400">Could not load profile: {error}</p>;
+    return (
+      <p className="font-mono text-sm text-red-400">
+        Could not load profile: {error}
+      </p>
+    );
   }
 
   return (
@@ -66,7 +71,8 @@ export default function DashboardPage() {
       <p className="eyebrow">Overview</p>
       <h1 className="font-display mt-2 text-2xl font-semibold">Site content</h1>
       <p className="mt-2 text-sm text-muted">
-        This is what powers your homepage. Changes appear on the live site within a minute.
+        This is what powers your homepage. Changes appear on the live site
+        within a minute.
       </p>
 
       <form onSubmit={handleSave} className="mt-8 space-y-6">
@@ -85,7 +91,9 @@ export default function DashboardPage() {
         <div className="card grid gap-5 p-6 sm:grid-cols-2">
           {fields.map((f) => (
             <div key={f.key}>
-              <label className="label" htmlFor={f.key}>{f.label}</label>
+              <label className="label" htmlFor={f.key}>
+                {f.label}
+              </label>
               <input
                 id={f.key}
                 className="input mt-2"
@@ -97,7 +105,9 @@ export default function DashboardPage() {
         </div>
 
         <div className="card p-6">
-          <label className="label" htmlFor="bio">Bio</label>
+          <label className="label" htmlFor="bio">
+            Bio
+          </label>
           <textarea
             id="bio"
             rows={6}
@@ -108,11 +118,19 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-4">
-          <button type="submit" className="btn-primary" disabled={status === "saving"}>
+          <button
+            type="submit"
+            className="btn-primary"
+            disabled={status === "saving"}
+          >
             {status === "saving" ? "Saving..." : "Save changes"}
           </button>
-          {status === "saved" && <span className="font-mono text-sm text-accent2">Saved.</span>}
-          {status === "error" && <span className="font-mono text-sm text-red-400">{error}</span>}
+          {status === "saved" && (
+            <span className="font-mono text-sm text-accent2">Saved.</span>
+          )}
+          {status === "error" && (
+            <span className="font-mono text-sm text-red-400">{error}</span>
+          )}
         </div>
       </form>
     </div>

@@ -2,28 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dark is the default theme (matches the original design).
-   ThemeToggle.js flips this by setting data-theme="light" on <html>. */
+/* Dark is the default theme. ThemeToggle.js flips this by setting
+   data-theme="light" on <html>. Values below are your supplied palette,
+   converted from hex to "R G B" triples for Tailwind's alpha-aware colors. */
 :root {
-  --color-bg: 15 17 23;
-  --color-surface: 23 26 36;
-  --color-surface2: 30 34 48;
-  --color-border: 42 46 61;
-  --color-ink: 237 237 240;
-  --color-muted: 146 150 166;
-  --color-accent: 232 163 61;
-  --color-accent2: 79 209 197;
+  --color-bg: 11 17 32; /* #0B1120 */
+  --color-surface: 17 24 39; /* #111827 cards */
+  --color-surface2: 24 32 51; /* slightly lighter than cards, for inputs */
+  --color-border: 36 48 68; /* #243044 */
+  --color-ink: 241 245 249; /* #F1F5F9 heading */
+  --color-muted: 148 163 184; /* #94A3B8 body */
+  --color-accent: 45 212 191; /* #2DD4BF primary accent */
+  --color-accent-hover: 94 234 212; /* #5EEAD4 accent hover */
+  --color-accent2: 74 222 128; /* #4ADE80 "available" green */
 }
 
 :root[data-theme="light"] {
-  --color-bg: 250 250 252;
-  --color-surface: 255 255 255;
-  --color-surface2: 243 244 248;
-  --color-border: 226 228 234;
-  --color-ink: 23 26 36;
-  --color-muted: 100 105 120;
-  --color-accent: 191 122 26;
-  --color-accent2: 13 133 122;
+  --color-bg: 250 247 240; /* warm cream, not stark white */
+  --color-surface: 255 253 248;
+  --color-surface2: 244 240 230;
+  --color-border: 224 217 201;
+  --color-ink: 28 25 20;
+  --color-muted: 90 82 70;
+  --color-accent: 15 118 110; /* #0F766E primary accent */
+  --color-accent-hover: 17 94 89; /* #115E59 accent hover */
+  --color-accent2: 21 128 61; /* #15803D "available" green */
 }
 
 * {
@@ -33,17 +36,6 @@
 body {
   background-color: rgb(var(--color-bg));
   color: rgb(var(--color-ink));
-  background-image:
-    radial-gradient(
-      circle at 15% 0%,
-      rgb(var(--color-accent) / 0.08),
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 85% 20%,
-      rgb(var(--color-accent2) / 0.06),
-      transparent 40%
-    );
   transition:
     background-color 0.25s ease,
     color 0.25s ease;
@@ -82,7 +74,7 @@ body {
 }
 
 .btn-primary {
-  @apply inline-flex items-center gap-2 rounded-md bg-accent px-5 py-3 font-medium text-bg transition hover:brightness-110 active:brightness-95;
+  @apply inline-flex items-center gap-2 rounded-md bg-accent px-5 py-3 font-medium text-bg transition hover:bg-accentHover active:brightness-95;
 }
 
 .btn-secondary {
@@ -103,4 +95,15 @@ body {
 
 .pill {
   @apply inline-flex items-center gap-1.5 rounded-full border border-border bg-surface2 px-3 py-1 font-mono text-xs text-muted;
+}
+
+.section-divider {
+  @apply mx-auto h-px max-w-6xl;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgb(var(--color-border)) 20%,
+    rgb(var(--color-border)) 80%,
+    transparent
+  );
 }
