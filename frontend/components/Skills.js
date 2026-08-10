@@ -37,7 +37,7 @@ export default function Skills({ skills }) {
                   <div className="mb-1.5 flex items-center justify-between">
                     <span className="text-sm text-ink">{skill.name}</span>
                     <span className="font-mono text-xs text-muted">
-                      {skill.level}%
+                      {skill.level}
                     </span>
                   </div>
                   <div className="h-1.5 w-full rounded-full bg-surface2">
