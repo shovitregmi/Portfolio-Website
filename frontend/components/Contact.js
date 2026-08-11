@@ -4,7 +4,7 @@ import { useState } from "react";
 import { api } from "@/lib/api";
 import Reveal from "@/components/Reveal";
 import SectionHeader from "@/components/SectionHeader";
-import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
+import { FiGithub, FiLinkedin, FiMail, FiPhone } from "react-icons/fi";
 
 export default function Contact({ profile }) {
   const [form, setForm] = useState({
@@ -68,6 +68,7 @@ export default function Contact({ profile }) {
                   href={`tel:${profile.phone}`}
                   className="flex items-center gap-2.5 text-[0.78rem] text-muted transition hover:text-accent"
                 >
+                  <FiPhone className="h-4 w-4" />
                   {profile.phone}
                 </a>
               )}
