@@ -1,122 +1,106 @@
-"use client";
+import Reveal from "@/components/Reveal";
+import TerminalPanel from "@/components/TerminalPanel";
 
-import { useEffect, useState } from "react";
-import { FiGithub, FiLinkedin, FiChevronDown } from "react-icons/fi";
-
-// Full phrases (not just the role) so grammar like "a" vs "an" can differ
-// per item. Edit this list to change what rotates through the hero.
-const ROLES = [
-  "Full-Stack Developer",
-  "AI/ML Enthusiast",
-  "CSIT Student",
-  "UI/UX Creative",
-  "Tech Explorer",
-  "Problem Solver",
-];
-
-const TYPE_SPEED = 45;
-const DELETE_SPEED = 25;
-const HOLD_MS = 1400;
+function splitName(name = "") {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length <= 1) return { first: name, last: "" };
+  const last = parts.pop();
+  return { first: parts.join(" "), last };
+}
 
 export default function Hero({ profile }) {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [typed, setTyped] = useState("");
-  const [phase, setPhase] = useState("typing"); // typing | holding | deleting
-
-  useEffect(() => {
-    const currentPhrase = ROLES[roleIndex];
-    let timeout;
-
-    if (phase === "typing") {
-      if (typed.length < currentPhrase.length) {
-        timeout = setTimeout(
-          () => setTyped(currentPhrase.slice(0, typed.length + 1)),
-          TYPE_SPEED,
-        );
-      } else {
-        timeout = setTimeout(() => setPhase("holding"), HOLD_MS);
-      }
-    } else if (phase === "holding") {
-      timeout = setTimeout(() => setPhase("deleting"), HOLD_MS);
-    } else if (phase === "deleting") {
-      if (typed.length > 0) {
-        timeout = setTimeout(() => setTyped(typed.slice(0, -1)), DELETE_SPEED);
-      } else {
-        setRoleIndex((i) => (i + 1) % ROLES.length);
-        setPhase("typing");
-      }
-    }
-
-    return () => clearTimeout(timeout);
-  }, [typed, phase, roleIndex]);
+  const { first, last } = splitName(profile.name);
 
   return (
     <section
       id="top"
-      className="section relative flex min-h-[90vh] flex-col items-center justify-center text-center"
+      className="relative min-h-screen overflow-hidden pt-28 md:pt-32"
     >
-      <div className="animate-fadeUp mx-auto max-w-3xl">
-        {profile.availability && (
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2">
-            <span className="h-2 w-2 rounded-full bg-accent2" />
-            <span className="font-mono text-sm uppercase tracking-wider text-accent2">
-              Available for work
-            </span>
+      <div
+        className="pointer-events-none absolute inset-0 hero-grid-bg"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_70%_40%,rgb(var(--color-accent)/0.06),transparent_70%)]"
+        aria-hidden="true"
+      />
+
+      <div className="container-px relative z-10 mx-auto grid max-w-[1200px] gap-12 pb-20 lg:grid-cols-2 lg:items-center lg:gap-16">
+        <Reveal className="animate-fadeUp">
+          {profile.availability && (
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-3.5 py-1.5">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
+              <span className="font-mono text-[0.7rem] uppercase tracking-[0.1em] text-accent">
+                Available for Opportunities
+              </span>
+            </div>
+          )}
+
+          <h1 className="font-display text-[clamp(3rem,6vw,5.5rem)] font-extrabold leading-[1.02] tracking-tight">
+            {first}
+            {last && (
+              <>
+                <br />
+                <em className="font-serif italic text-accent">{last}</em>
+              </>
+            )}
+          </h1>
+
+          <p className="mt-4 font-display text-lg font-semibold text-muted md:text-xl">
+            {profile.title}
+          </p>
+
+          <p className="mt-5 max-w-md text-[0.88rem] leading-relaxed text-muted2">
+            {profile.tagline}
+          </p>
+
+          <div className="mt-10 flex flex-wrap gap-3.5">
+            <a href="#projects" className="btn-primary">
+              View Projects
+            </a>
+            <a href="#contact" className="btn-ghost">
+              Get In Touch
+            </a>
           </div>
-        )}
 
-        <h1 className="font-display mt-7 text-6xl font-semibold leading-[1.05] tracking-tight md:text-8xl">
-          {profile.name}
-        </h1>
+          <TerminalPanel profile={profile} />
+        </Reveal>
 
-        <p className="mt-5 flex min-h-[2.25rem] items-center justify-center font-mono text-xl text-muted md:text-2xl">
-          Currently a&nbsp;<span className="text-accent">{typed}</span>
-          <span className="ml-1 inline-block h-6 w-2.5 animate-blink bg-accent align-middle" />
-        </p>
-
-        <p className="mx-auto mt-7 max-w-2xl text-xl text-muted">
-          {profile.tagline}
-        </p>
-
-        <div className="mt-12 flex flex-wrap justify-center gap-4">
-          <a
-            href="#contact"
-            className="btn-primary text-base transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[0_0_30px_-6px_rgb(var(--color-accent))]"
-          >
-            Get in touch
-          </a>
-          {profile.githubUrl && (
-            <a
-              href={profile.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary text-base transition-transform duration-200 hover:-translate-y-0.5"
-            >
-              <FiGithub size={18} />
-              GitHub
-            </a>
-          )}
-          {profile.linkedinUrl && (
-            <a
-              href={profile.linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary text-base transition-transform duration-200 hover:-translate-y-0.5"
-            >
-              <FiLinkedin size={18} />
-              LinkedIn
-            </a>
-          )}
-        </div>
+        <Reveal className="hidden space-y-3.5 lg:block">
+          {[
+            profile.institution && {
+              label: "Education",
+              value: `${profile.major} @ ${profile.institution}`,
+            },
+            profile.educationStatus && {
+              label: "Status",
+              value: profile.educationStatus,
+            },
+            profile.currentFocus && {
+              label: "Focus",
+              value: profile.currentFocus,
+            },
+            profile.location && {
+              label: "Location",
+              value: profile.location,
+            },
+          ]
+            .filter(Boolean)
+            .map((item) => (
+              <div
+                key={item.label}
+                className="card flex items-center gap-4 p-5 transition hover:-translate-y-0.5 hover:border-accent/40"
+              >
+                <div>
+                  <p className="font-mono text-[0.7rem] uppercase tracking-[0.1em] text-muted2">
+                    {item.label}
+                  </p>
+                  <p className="font-display text-base font-bold">{item.value}</p>
+                </div>
+              </div>
+            ))}
+        </Reveal>
       </div>
-
-      <a
-        href="#about"
-        aria-label="Scroll to about section"
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-muted transition hover:text-accent"
-      >
-        <FiChevronDown size={26} />
-      </a>
     </section>
   );
 }

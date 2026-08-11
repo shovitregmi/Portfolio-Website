@@ -12,12 +12,17 @@ import {
   FiMail,
   FiExternalLink,
   FiLogOut,
+  FiBriefcase,
+  FiBookOpen,
 } from "react-icons/fi";
 
 const navItems = [
-  { href: "/admin/dashboard", label: "Overview", Icon: FiGrid },
-  { href: "/admin/projects", label: "Projects", Icon: FiFolder },
+  { href: "/admin/dashboard", label: "Profile", Icon: FiGrid },
   { href: "/admin/skills", label: "Skills", Icon: FiAward },
+  { href: "/admin/projects", label: "Projects", Icon: FiFolder },
+  { href: "/admin/experience", label: "Experience", Icon: FiBriefcase },
+  { href: "/admin/education", label: "Education", Icon: FiBookOpen },
+  { href: "/admin/certificates", label: "Certificates", Icon: FiAward },
   { href: "/admin/messages", label: "Messages", Icon: FiMail },
 ];
 

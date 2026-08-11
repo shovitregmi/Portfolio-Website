@@ -1,4 +1,15 @@
 import Reveal from "@/components/Reveal";
+import SectionHeader from "@/components/SectionHeader";
+import TagPill from "@/components/TagPill";
+
+const CATEGORY_ACCENTS = [
+  "text-accentWarm",
+  "text-accent",
+  "text-accent2",
+  "text-accentDark",
+  "text-accentWarm",
+  "text-accent",
+];
 
 export default function Skills({ skills }) {
   if (!skills || skills.length === 0) return null;
@@ -10,45 +21,33 @@ export default function Skills({ skills }) {
     return acc;
   }, {});
 
+  const categories = Object.entries(grouped);
+
   return (
     <section id="skills" className="section">
-      <Reveal className="max-w-2xl">
-        <p className="eyebrow flex items-center gap-2">
-          <span className="h-px w-6 bg-accent" />
-          Skills
-        </p>
-        <h2 className="font-display mt-4 text-3xl font-semibold leading-tight md:text-4xl">
-          Tools I reach for
-        </h2>
-      </Reveal>
+      <SectionHeader
+        number="02"
+        label="Technical Arsenal"
+        title="Skills &"
+        titleAccent="Stack"
+      />
 
-      <div className="mx-auto mt-10 grid max-w-4xl gap-8 md:grid-cols-2">
-        {Object.entries(grouped).map(([category, items], i) => (
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {categories.map(([category, items], i) => (
           <Reveal
             key={category}
-            className={`card p-6 transition hover:-translate-y-1 hover:shadow-lg ${
-              i % 2 === 1 ? "delay-100" : ""
-            }`}
+            className="card p-6 transition hover:border-accent/40"
           >
-            <p className="label mb-5">{category}</p>
-            <div className="space-y-4">
+            <p
+              className={`mb-3.5 font-display text-[0.82rem] font-bold uppercase tracking-[0.06em] ${CATEGORY_ACCENTS[i % CATEGORY_ACCENTS.length]}`}
+            >
+              {category}
+            </p>
+            <div className="flex flex-wrap gap-2">
               {items.map((skill) => (
-                <div key={skill.id}>
-                  <div className="mb-1.5 flex items-center justify-between">
-                    <span className="text-sm text-ink">{skill.name}</span>
-                    <span className="font-mono text-xs text-muted">
-                      {skill.level}
-                    </span>
-                  </div>
-                  <div className="h-1.5 w-full rounded-full bg-surface2">
-                    <div
-                      className="h-1.5 rounded-full bg-accent transition-all duration-700"
-                      style={{
-                        width: `${Math.min(100, Math.max(0, skill.level))}%`,
-                      }}
-                    />
-                  </div>
-                </div>
+                <TagPill key={skill.id} active={skill.level >= 70}>
+                  {skill.name}
+                </TagPill>
               ))}
             </div>
           </Reveal>

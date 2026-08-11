@@ -1,32 +1,39 @@
+import { FiGithub, FiLinkedin } from "react-icons/fi";
+
 export default function Footer({ profile }) {
-  const links = [
-    { label: "GitHub", href: profile.githubUrl },
-    { label: "LinkedIn", href: profile.linkedinUrl },
-    { label: "Instagram", href: profile.instagramUrl },
-    { label: "WhatsApp", href: profile.whatsappUrl },
-  ].filter((l) => l.href);
+  const socials = [
+    { href: profile.githubUrl, Icon: FiGithub, label: "GitHub" },
+    { href: profile.linkedinUrl, Icon: FiLinkedin, label: "LinkedIn" },
+  ].filter((s) => s.href);
 
   return (
-    <footer className="container-px mx-auto max-w-6xl border-t border-border/60 py-10 pb-16">
-      <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-        <p className="font-mono text-xs text-muted">
-          &copy; {new Date().getFullYear()} {profile.name}. Built from scratch.
-        </p>
-        {links.length > 0 && (
-          <div className="flex gap-6">
-            {links.map((link) => (
+    <footer className="border-t border-border/70 py-10">
+      <div className="container-px mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-center md:flex-row md:justify-between md:text-left">
+        <div>
+          <p className="font-display text-sm font-bold">{profile.name}</p>
+          <p className="mt-1 font-mono text-xs text-muted2">{profile.title}</p>
+        </div>
+
+        {socials.length > 0 && (
+          <div className="flex items-center gap-5">
+            {socials.map(({ href, Icon, label }) => (
               <a
-                key={link.label}
-                href={link.href}
+                key={label}
+                href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-xs text-muted transition hover:text-accent"
+                aria-label={label}
+                className="text-muted transition hover:text-accent"
               >
-                {link.label}
+                <Icon size={16} />
               </a>
             ))}
           </div>
         )}
+
+        <p className="font-mono text-[0.72rem] tracking-[0.08em] text-muted2">
+          © {new Date().getFullYear()} {profile.name}
+        </p>
       </div>
     </footer>
   );

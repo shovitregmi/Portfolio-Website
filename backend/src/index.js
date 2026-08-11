@@ -10,6 +10,9 @@ const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const skillRoutes = require("./routes/skillRoutes");
 const projectRoutes = require("./routes/projectRoutes");
+const experienceRoutes = require("./routes/experienceRoutes");
+const educationRoutes = require("./routes/educationRoutes");
+const certificateRoutes = require("./routes/certificateRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const { errorHandler, notFound } = require("./middleware/errorHandler");
 
@@ -36,6 +39,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/skills", skillRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/experiences", experienceRoutes);
+app.use("/api/education", educationRoutes);
+app.use("/api/certificates", certificateRoutes);
 app.use("/api/messages", messageRoutes);
 
 app.use(notFound);

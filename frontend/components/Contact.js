@@ -3,14 +3,8 @@
 import { useState } from "react";
 import { api } from "@/lib/api";
 import Reveal from "@/components/Reveal";
-import {
-  FiMail,
-  FiGithub,
-  FiLinkedin,
-  FiInstagram,
-  FiMessageCircle,
-  FiArrowRight,
-} from "react-icons/fi";
+import SectionHeader from "@/components/SectionHeader";
+import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 
 export default function Contact({ profile }) {
   const [form, setForm] = useState({
@@ -40,103 +34,82 @@ export default function Contact({ profile }) {
     }
   }
 
-  const rows = [
-    {
-      label: "Email",
-      value: "Send me an email",
-      href: `mailto:${profile.email}`,
-      Icon: FiMail,
-    },
-    {
-      label: "GitHub",
-      value: "View my GitHub",
-      href: profile.githubUrl,
-      Icon: FiGithub,
-    },
-    {
-      label: "LinkedIn",
-      value: "Connect on LinkedIn",
-      href: profile.linkedinUrl,
-      Icon: FiLinkedin,
-    },
-    {
-      label: "Instagram",
-      value: "Follow on Instagram",
-      href: profile.instagramUrl,
-      Icon: FiInstagram,
-    },
-    {
-      label: "WhatsApp",
-      value: "Message on WhatsApp",
-      href: profile.whatsappUrl,
-      Icon: FiMessageCircle,
-    },
-  ].filter((r) => r.href);
-
   return (
-    <section id="contact" className="section">
-      <div className="grid gap-12 lg:grid-cols-5">
-        <Reveal className="lg:col-span-2">
-          <p className="eyebrow flex items-center gap-2">
-            <span className="h-px w-6 bg-accent" />
-            Contact
-          </p>
-          <h2 className="font-display mt-4 text-4xl font-semibold leading-tight md:text-5xl">
-            Let&apos;s build something{" "}
-            <span className="text-accent italic">worth building</span>.
-          </h2>
-          <p className="mt-5 text-muted">
-            Have a project in mind, an opening on your team, or just want to say
-            hello? I read every message and usually reply within a day or two.
-          </p>
+    <div id="contact" className="section pb-28">
+      <div className="contact-section">
+        <SectionHeader
+          number="06"
+          label="Let's Talk"
+          title="Get In"
+          titleAccent="Touch"
+          className="!mb-8"
+        />
 
-          {rows.length > 0 && (
-            <div className="mt-8 overflow-hidden rounded-lg border border-border">
-              {rows.map((row) => (
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-12">
+          <Reveal>
+            <p className="text-[0.84rem] leading-relaxed text-muted2">
+              I&apos;m currently open to internships, freelance projects, and
+              full-time opportunities. If you have a project in mind or want to
+              collaborate, feel free to reach out!
+            </p>
+
+            <div className="mt-7 space-y-3">
+              {profile.email && (
                 <a
-                  key={row.label}
-                  href={row.href}
-                  target={row.label === "Email" ? undefined : "_blank"}
-                  rel={
-                    row.label === "Email" ? undefined : "noopener noreferrer"
-                  }
-                  className="group flex items-center gap-4 border-b border-border px-5 py-4 transition last:border-b-0 hover:bg-surface2"
+                  href={`mailto:${profile.email}`}
+                  className="flex items-center gap-2.5 text-[0.78rem] text-muted transition hover:text-accent"
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-surface text-muted transition group-hover:border-accent group-hover:text-accent">
-                    <row.Icon size={17} />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="label block">{row.label}</span>
-                    <span className="block truncate text-sm text-ink">
-                      {row.value}
-                    </span>
-                  </span>
-                  <FiArrowRight
-                    size={16}
-                    className="shrink-0 text-muted opacity-0 transition group-hover:translate-x-1 group-hover:text-accent group-hover:opacity-100"
-                  />
+                  <FiMail size={15} />
+                  {profile.email}
                 </a>
-              ))}
+              )}
+              {profile.phone && (
+                <a
+                  href={`tel:${profile.phone}`}
+                  className="flex items-center gap-2.5 text-[0.78rem] text-muted transition hover:text-accent"
+                >
+                  {profile.phone}
+                </a>
+              )}
+              {profile.linkedinUrl && (
+                <a
+                  href={profile.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-[0.78rem] text-muted transition hover:text-accent"
+                >
+                  <FiLinkedin size={15} />
+                  LinkedIn
+                </a>
+              )}
+              {profile.githubUrl && (
+                <a
+                  href={profile.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-[0.78rem] text-muted transition hover:text-accent"
+                >
+                  <FiGithub size={15} />
+                  GitHub
+                </a>
+              )}
+              {profile.location && (
+                <p className="text-[0.78rem] text-muted2">{profile.location}</p>
+              )}
             </div>
-          )}
-        </Reveal>
+          </Reveal>
 
-        <Reveal className="lg:col-span-3">
-          <form onSubmit={handleSubmit} className="card space-y-5 p-6 md:p-8">
-            <h3 className="font-display text-xl font-semibold">
-              Send a message
-            </h3>
-
-            <div className="grid gap-5 sm:grid-cols-2">
+          <Reveal>
+            <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
                 <label className="label" htmlFor="name">
-                  Name
+                  Your Name
                 </label>
                 <input
                   id="name"
                   required
-                  placeholder="Your name"
-                  className="input mt-2"
+                  placeholder="Your Name"
+                  className="input mt-1.5"
                   value={form.name}
                   onChange={(e) => update("name", e.target.value)}
                 />
@@ -149,62 +122,61 @@ export default function Contact({ profile }) {
                   id="email"
                   type="email"
                   required
-                  placeholder="you@email.com"
-                  className="input mt-2"
+                  placeholder="you@example.com"
+                  className="input mt-1.5"
                   value={form.email}
                   onChange={(e) => update("email", e.target.value)}
                 />
               </div>
-            </div>
+              <div>
+                <label className="label" htmlFor="subject">
+                  Subject
+                </label>
+                <input
+                  id="subject"
+                  placeholder="Internship / Collaboration / Project"
+                  className="input mt-1.5"
+                  value={form.subject}
+                  onChange={(e) => update("subject", e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="label" htmlFor="message">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  required
+                  rows={5}
+                  placeholder="Tell me about your project or opportunity..."
+                  className="input mt-1.5 resize-none"
+                  value={form.message}
+                  onChange={(e) => update("message", e.target.value)}
+                />
+              </div>
 
-            <div>
-              <label className="label" htmlFor="subject">
-                Subject (optional)
-              </label>
-              <input
-                id="subject"
-                placeholder="What's this about?"
-                className="input mt-2"
-                value={form.subject}
-                onChange={(e) => update("subject", e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label className="label" htmlFor="message">
-                Message
-              </label>
-              <textarea
-                id="message"
-                required
-                rows={5}
-                placeholder="Tell me about your project or idea..."
-                className="input mt-2 resize-none"
-                value={form.message}
-                onChange={(e) => update("message", e.target.value)}
-              />
-            </div>
-
-            <div className="flex items-center gap-4">
-              <button
-                type="submit"
-                className="btn-primary transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[0_0_30px_-6px_rgb(var(--color-accent))]"
-                disabled={status === "sending"}
-              >
-                {status === "sending" ? "Sending..." : "Send message"}
-              </button>
               {status === "sent" && (
-                <span className="font-mono text-sm text-accent2">
-                  Message sent. Thanks!
-                </span>
+                <p className="rounded-lg border border-accent/20 bg-accent/10 px-4 py-2.5 font-mono text-sm text-accent">
+                  ✓ Message sent successfully!
+                </p>
               )}
               {status === "error" && (
-                <span className="font-mono text-sm text-red-400">{error}</span>
+                <p className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-2.5 font-mono text-sm text-red-400">
+                  {error}
+                </p>
               )}
-            </div>
-          </form>
-        </Reveal>
+
+              <button
+                type="submit"
+                className="btn-primary w-full"
+                disabled={status === "sending"}
+              >
+                {status === "sending" ? "Sending..." : "Send Message →"}
+              </button>
+            </form>
+          </Reveal>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

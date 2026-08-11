@@ -2,31 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dark is the default theme. ThemeToggle.js flips this by setting
-   data-theme="light" on <html>. Values below are your supplied palette,
-   converted from hex to "R G B" triples for Tailwind's alpha-aware colors. */
+/* Forest & Paper palette — dark is default. ThemeToggle sets data-theme="light". */
 :root {
-  --color-bg: 11 17 32; /* #0B1120 */
-  --color-surface: 17 24 39; /* #111827 cards */
-  --color-surface2: 24 32 51; /* slightly lighter than cards, for inputs */
-  --color-border: 36 48 68; /* #243044 */
-  --color-ink: 241 245 249; /* #F1F5F9 heading */
-  --color-muted: 148 163 184; /* #94A3B8 body */
-  --color-accent: 45 212 191; /* #2DD4BF primary accent */
-  --color-accent-hover: 94 234 212; /* #5EEAD4 accent hover */
-  --color-accent2: 74 222 128; /* #4ADE80 "available" green */
+  --color-bg: 15 17 16; /* #0F1110 */
+  --color-surface: 21 24 22; /* #151816 */
+  --color-surface2: 25 28 26; /* #191C1A cards */
+  --color-border: 42 48 44; /* #2A302C */
+  --color-ink: 241 240 234; /* #F1F0EA primary text */
+  --color-muted: 166 170 164; /* #A6AAA4 secondary text */
+  --color-muted2: 116 122 116; /* #747A74 muted text */
+  --color-accent: 120 214 180; /* #78D6B4 primary accent */
+  --color-accent-hover: 150 229 201; /* #96E5C9 */
+  --color-accent-dark: 61 143 114; /* #3D8F72 */
+  --color-accent-warm: 201 130 104; /* #C98268 terracotta */
+  --color-accent2: 120 214 180;
 }
 
 :root[data-theme="light"] {
-  --color-bg: 250 247 240; /* warm cream, not stark white */
-  --color-surface: 255 253 248;
-  --color-surface2: 244 240 230;
-  --color-border: 224 217 201;
-  --color-ink: 28 25 20;
-  --color-muted: 90 82 70;
-  --color-accent: 15 118 110; /* #0F766E primary accent */
-  --color-accent-hover: 17 94 89; /* #115E59 accent hover */
-  --color-accent2: 21 128 61; /* #15803D "available" green */
+  --color-bg: 245 244 239; /* #F5F4EF */
+  --color-surface: 236 235 229; /* #ECEBE5 */
+  --color-surface2: 255 255 255; /* #FFFFFF cards */
+  --color-border: 217 216 209; /* #D9D8D1 */
+  --color-ink: 23 26 24; /* #171A18 */
+  --color-muted: 94 101 95; /* #5E655F */
+  --color-muted2: 133 138 132; /* #858A84 */
+  --color-accent: 52 122 97; /* #347A61 forest green */
+  --color-accent-hover: 40 99 79; /* #28634F */
+  --color-accent-dark: 52 122 97;
+  --color-accent-warm: 185 104 80; /* #B96850 */
+  --color-accent2: 185 227 210; /* #B9E3D2 accent light */
 }
 
 * {
@@ -62,48 +66,85 @@ body {
 }
 
 .container-px {
-  @apply px-6 md:px-12 lg:px-20;
+  @apply px-5 sm:px-8 md:px-12 lg:px-16;
 }
 
 .section {
-  @apply container-px py-24 md:py-32 max-w-6xl mx-auto;
+  @apply container-px py-20 md:py-28 max-w-[1200px] mx-auto;
+}
+
+.section-label {
+  @apply font-mono text-[0.68rem] uppercase tracking-[0.18em] text-accent mb-2.5;
+}
+
+.section-title {
+  @apply font-display text-[clamp(2rem,4vw,3rem)] font-extrabold tracking-tight leading-tight mb-10 md:mb-12;
 }
 
 .eyebrow {
-  @apply font-mono text-xs uppercase tracking-[0.25em] text-accent;
+  @apply font-mono text-xs uppercase tracking-[0.18em] text-accent;
 }
 
 .btn-primary {
-  @apply inline-flex items-center gap-2 rounded-md bg-accent px-5 py-3 font-medium text-bg transition hover:bg-accentHover active:brightness-95;
+  @apply inline-flex items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 font-display text-[0.78rem] font-bold uppercase tracking-wider text-bg transition hover:bg-accentHover hover:-translate-y-0.5 active:brightness-95;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-md border border-border bg-transparent px-6 py-3 font-display text-[0.78rem] font-semibold uppercase tracking-wider text-ink transition hover:border-accent hover:-translate-y-0.5;
 }
 
 .btn-secondary {
-  @apply inline-flex items-center gap-2 rounded-md border border-border px-5 py-3 font-medium text-ink transition hover:border-accent hover:text-accent;
+  @apply inline-flex items-center justify-center gap-2 rounded-md border border-border bg-transparent px-6 py-3 font-display text-[0.78rem] font-semibold uppercase tracking-wider text-ink transition hover:border-accent hover:-translate-y-0.5;
 }
 
 .card {
-  @apply rounded-lg border border-border bg-surface transition-colors;
+  @apply rounded-xl border border-border bg-surface2 transition-colors;
 }
 
 .input {
-  @apply w-full rounded-md border border-border bg-surface2 px-4 py-3 text-ink placeholder:text-muted focus:border-accent outline-none transition;
+  @apply w-full rounded-lg border border-border bg-surface2 px-4 py-3 font-mono text-sm text-ink placeholder:text-muted2 focus:border-accent outline-none transition;
 }
 
 .label {
-  @apply font-mono text-xs uppercase tracking-wider text-muted;
+  @apply font-mono text-[0.68rem] uppercase tracking-[0.1em] text-muted2;
 }
 
 .pill {
-  @apply inline-flex items-center gap-1.5 rounded-full border border-border bg-surface2 px-3 py-1 font-mono text-xs text-muted;
+  @apply inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 font-mono text-[0.75rem] text-muted;
 }
 
-.section-divider {
-  @apply mx-auto h-px max-w-6xl;
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgb(var(--color-border)) 20%,
-    rgb(var(--color-border)) 80%,
-    transparent
-  );
+.pill-active {
+  @apply border-accent/25 bg-accent/10 text-accent;
+}
+
+.tech-pill {
+  @apply inline-flex items-center rounded px-2.5 py-1 font-mono text-[0.68rem] tracking-wide border border-border bg-surface text-muted2;
+}
+
+.hero-grid-bg {
+  background-image:
+    linear-gradient(rgb(var(--color-border) / 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--color-border) / 0.35) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+
+.contact-section {
+  @apply rounded-3xl border border-border bg-surface p-8 md:p-14 max-w-[1104px] mx-auto;
+}
+
+.timeline-rail::before {
+  content: "";
+  @apply absolute left-2 top-2 bottom-2 w-px bg-border;
+}
+
+.timeline-dot::before {
+  content: "";
+  @apply absolute -left-[26px] top-1.5 h-2.5 w-2.5 rounded-full bg-accent border-2 border-bg;
+  box-shadow: 0 0 10px rgb(var(--color-accent) / 0.5);
+}
+
+.timeline-bullet::before {
+  content: "→";
+  @apply absolute left-0 text-accent;
 }

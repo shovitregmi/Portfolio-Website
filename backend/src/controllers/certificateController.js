@@ -13,7 +13,16 @@ async function listCertificates(req, res, next) {
 
 async function createCertificate(req, res, next) {
   try {
-    const { title, issuer, issueDate, credentialUrl, imageUrl, order } = req.body;
+    const {
+      title,
+      issuer,
+      issueDate,
+      credentialId,
+      credentialUrl,
+      imageUrl,
+      status,
+      order,
+    } = req.body;
     if (!title || !issuer) {
       return res.status(400).json({ error: "Title and issuer are required." });
     }
@@ -23,8 +32,10 @@ async function createCertificate(req, res, next) {
         title,
         issuer,
         issueDate: issueDate ? new Date(issueDate) : null,
-        credentialUrl,
-        imageUrl,
+        credentialId: credentialId || null,
+        credentialUrl: credentialUrl || null,
+        imageUrl: imageUrl || null,
+        status: status || "completed",
         order: order !== undefined ? Number(order) : 0,
       },
     });
@@ -37,16 +48,33 @@ async function createCertificate(req, res, next) {
 async function updateCertificate(req, res, next) {
   try {
     const { id } = req.params;
-    const { title, issuer, issueDate, credentialUrl, imageUrl, order } = req.body;
+    const {
+      title,
+      issuer,
+      issueDate,
+      credentialId,
+      credentialUrl,
+      imageUrl,
+      status,
+      order,
+    } = req.body;
 
     const certificate = await prisma.certificate.update({
-      where: { id },
+      where: { id: Number(id) },
       data: {
         ...(title !== undefined && { title }),
         ...(issuer !== undefined && { issuer }),
-        ...(issueDate !== undefined && { issueDate: issueDate ? new Date(issueDate) : null }),
-        ...(credentialUrl !== undefined && { credentialUrl }),
-        ...(imageUrl !== undefined && { imageUrl }),
+        ...(issueDate !== undefined && {
+          issueDate: issueDate ? new Date(issueDate) : null,
+        }),
+        ...(credentialId !== undefined && {
+          credentialId: credentialId || null,
+        }),
+        ...(credentialUrl !== undefined && {
+          credentialUrl: credentialUrl || null,
+        }),
+        ...(imageUrl !== undefined && { imageUrl: imageUrl || null }),
+        ...(status !== undefined && { status }),
         ...(order !== undefined && { order: Number(order) }),
       },
     });
@@ -59,11 +87,16 @@ async function updateCertificate(req, res, next) {
 async function deleteCertificate(req, res, next) {
   try {
     const { id } = req.params;
-    await prisma.certificate.delete({ where: { id } });
+    await prisma.certificate.delete({ where: { id: Number(id) } });
     res.json({ success: true });
   } catch (err) {
     next(err);
   }
 }
 
-module.exports = { listCertificates, createCertificate, updateCertificate, deleteCertificate };
+module.exports = {
+  listCertificates,
+  createCertificate,
+  updateCertificate,
+  deleteCertificate,
+};

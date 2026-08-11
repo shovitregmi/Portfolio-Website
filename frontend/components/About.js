@@ -1,63 +1,76 @@
 import Reveal from "@/components/Reveal";
+import SectionHeader from "@/components/SectionHeader";
+import TagPill from "@/components/TagPill";
 import { getIcon, getIconByKey } from "@/lib/icons";
 
-export default function About({ profile, skills = [], projectsCount = 0 }) {
+export default function About({ profile, skills = [] }) {
   const highlightSkills = skills.filter((s) => s.showInAbout);
-
-  const stats = [
-    { value: `${projectsCount}+`, label: "Projects built", underline: true },
-    { value: profile.major || "BSc. CSIT", label: "Major" },
-    { value: "\u221E", label: "Curiosity" },
-    { value: "NP", label: "Nepal" },
-  ];
 
   return (
     <section id="about" className="section">
-      <Reveal>
-        <p className="eyebrow flex items-center gap-2">
-          <span className="h-px w-6 bg-accent" />
-          About
-        </p>
-        <h2 className="font-display mt-4 text-3xl font-semibold leading-tight md:text-4xl">
-          A bit about how I work
-        </h2>
-      </Reveal>
+      <SectionHeader
+        number="01"
+        label="About Me"
+        title="About"
+        titleAccent="Me"
+      />
 
-      <div className="mt-8 grid gap-14 md:grid-cols-2 md:items-start">
+      <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
         <Reveal>
-          <p className="max-w-xl whitespace-pre-line text-base leading-relaxed text-muted">
+          <p className="max-w-xl whitespace-pre-line text-[0.88rem] leading-relaxed text-muted2">
             {profile.bio}
           </p>
 
           {highlightSkills.length > 0 && (
             <div className="mt-6 flex max-w-xl flex-wrap gap-2">
               {highlightSkills.map((skill) => {
-                const Icon = skill.icon ? getIconByKey(skill.icon) : getIcon(skill.name);
+                const Icon = skill.icon
+                  ? getIconByKey(skill.icon)
+                  : getIcon(skill.name);
                 return (
-                  <span key={skill.id} className="pill transition hover:border-accent hover:text-accent">
-                    <Icon size={13} />
+                  <TagPill key={skill.id} active>
+                    <Icon size={12} />
                     {skill.name}
-                  </span>
+                  </TagPill>
                 );
               })}
             </div>
           )}
         </Reveal>
 
-        <div className="self-start">
-          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border">
-            {stats.map((stat) => (
-              <div
-                key={stat.label}
-                className="relative bg-surface p-6 transition hover:-translate-y-1 hover:z-10 hover:shadow-lg"
-              >
-                <p className="font-display text-2xl font-semibold md:text-3xl">{stat.value}</p>
-                <p className="label mt-2">{stat.label}</p>
-                {stat.underline && <div className="mt-4 h-0.5 w-full bg-accent" />}
-              </div>
-            ))}
+        <Reveal>
+          <div className="card divide-y divide-border overflow-hidden">
+            {[
+              {
+                label: "Education",
+                value: profile.major,
+                sub: profile.institution,
+              },
+              {
+                label: "Status",
+                value: profile.educationStatus || "Final Year",
+              },
+              {
+                label: "Focus",
+                value: profile.currentFocus,
+              },
+            ]
+              .filter((item) => item.value)
+              .map((item) => (
+                <div key={item.label} className="p-5">
+                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.1em] text-accent">
+                    {item.label}
+                  </p>
+                  <p className="mt-1 font-display text-base font-bold">
+                    {item.value}
+                  </p>
+                  {item.sub && (
+                    <p className="mt-1 text-sm text-muted2">{item.sub}</p>
+                  )}
+                </div>
+              ))}
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

@@ -120,7 +120,7 @@ export default function SkillsAdminPage() {
         </div>
         <div>
           <label className="label" htmlFor="level">
-            Level (0-100)
+            Level (0-100, optional — not shown on public site)
           </label>
           <input
             id="level"

@@ -5,14 +5,16 @@ import { api } from "@/lib/api";
 
 const fields = [
   { key: "name", label: "Name" },
-  { key: "title", label: "Title" },
-  { key: "tagline", label: "Tagline" },
-  { key: "major", label: "Major (shown in About stat card)" },
+  { key: "title", label: "Professional title" },
+  { key: "tagline", label: "Hero tagline" },
+  { key: "major", label: "Major / degree" },
+  { key: "institution", label: "Institution" },
+  { key: "educationStatus", label: "Education status (e.g. Final Year)" },
+  { key: "currentFocus", label: "Current focus" },
   { key: "location", label: "Location" },
   { key: "email", label: "Contact email" },
   { key: "phone", label: "Phone (optional)" },
   { key: "resumeUrl", label: "Resume URL (optional)" },
-  { key: "avatarUrl", label: "Avatar image URL (optional)" },
   { key: "githubUrl", label: "GitHub URL" },
   { key: "linkedinUrl", label: "LinkedIn URL" },
   { key: "instagramUrl", label: "Instagram URL" },
@@ -68,7 +70,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <p className="eyebrow">Overview</p>
+      <p className="eyebrow">Profile</p>
       <h1 className="font-display mt-2 text-2xl font-semibold">Site content</h1>
       <p className="mt-2 text-sm text-muted">
         This is what powers your homepage. Changes appear on the live site

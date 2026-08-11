@@ -1,5 +1,5 @@
 // Prisma schema for the portfolio backend.
-// Run `npx prisma migrate dev --name init` after setting DATABASE_URL to create these tables.
+// Run `npx prisma migrate dev` after setting DATABASE_URL to create these tables.
 
 generator client {
   provider = "prisma-client-js"
@@ -20,32 +20,35 @@ model Admin {
 }
 
 model Profile {
-  id           Int      @id @default(autoincrement())
-  name         String   @default("Your Name")
-  title        String   @default("Full-Stack Developer")
-  tagline      String   @default("I build fast, reliable web apps from front to back.")
-  bio          String   @default("Write a short bio about yourself here. Talk about what you build, what you're learning, and what you're looking for.")
-  major        String   @default("BSc. CSIT") // shown in the About section stat card
-  location     String   @default("Kathmandu, Nepal")
-  email        String   @default("you@example.com")
-  phone        String?
-  resumeUrl    String?
-  avatarUrl    String?
-  availability Boolean  @default(true)
-  githubUrl    String?
-  linkedinUrl  String?
-  instagramUrl String?
-  whatsappUrl  String?
-  updatedAt    DateTime @updatedAt
+  id              Int      @id @default(autoincrement())
+  name            String   @default("Your Name")
+  title           String   @default("Full-Stack Developer")
+  tagline         String   @default("I build fast, reliable web apps from front to back.")
+  bio             String   @default("Write a short bio about yourself here. Talk about what you build, what you're learning, and what you're looking for.")
+  major           String   @default("BSc. CSIT")
+  institution     String?
+  educationStatus String?
+  currentFocus    String?
+  location        String   @default("Kathmandu, Nepal")
+  email           String   @default("you@example.com")
+  phone           String?
+  resumeUrl       String?
+  avatarUrl       String?
+  availability    Boolean  @default(true)
+  githubUrl       String?
+  linkedinUrl     String?
+  instagramUrl    String?
+  whatsappUrl     String?
+  updatedAt       DateTime @updatedAt
 }
 
 model Skill {
   id          Int      @id @default(autoincrement())
   name        String
-  category    String   @default("General") // e.g. Frontend, Backend, Tools, Languages
-  level       Int      @default(70) // 0-100, used for a proficiency bar
-  icon        String?  // optional manual icon override (key from lib/icons.js ICON_OPTIONS); falls back to name-based auto-detection when empty
-  showInAbout Boolean  @default(true) // whether this skill's icon pill appears in the About section tag row
+  category    String   @default("General")
+  level       Int      @default(70)
+  icon        String?
+  showInAbout Boolean  @default(true)
   order       Int      @default(0)
   createdAt   DateTime @default(now())
 }
@@ -58,13 +61,58 @@ model Project {
   description  String
   imageUrl     String?
   tags         String[] @default([])
-  tagIcons     Json     @default("{}") // optional manual icon overrides, e.g. {"React": "react"} — falls back to name-based auto-detection per tag when a tag has no entry
+  tagIcons     Json     @default("{}")
   liveUrl      String?
   repoUrl      String?
   featured     Boolean  @default(false)
   order        Int      @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model Experience {
+  id           Int       @id @default(autoincrement())
+  company      String
+  position     String
+  location     String?
+  startDate    DateTime
+  endDate      DateTime?
+  current      Boolean   @default(false)
+  description  String    @default("")
+  technologies String[]  @default([])
+  companyUrl   String?
+  order        Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Education {
+  id           Int       @id @default(autoincrement())
+  institution  String
+  degree       String
+  fieldOfStudy String?
+  location     String?
+  startDate    DateTime?
+  endDate      DateTime?
+  current      Boolean   @default(false)
+  description  String?
+  order        Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Certificate {
+  id            Int       @id @default(autoincrement())
+  title         String
+  issuer        String
+  issueDate     DateTime?
+  credentialId  String?
+  credentialUrl String?
+  imageUrl      String?
+  status        String    @default("completed")
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Message {
