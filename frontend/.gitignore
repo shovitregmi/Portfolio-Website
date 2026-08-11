@@ -1,4 +1,92 @@
-node_modules
-.next
+# ==========================================
+# 🚨 ENVIRONMENT VARIABLES & SECRETS (CRITICAL)
+# ==========================================
+.env
 .env.local
-out
+.env.development.local
+.env.test.local
+.env.production.local
+.env.production
+*.env
+*.pem
+*.key
+*.cert
+*.secret
+
+# ==========================================
+# 📦 DEPENDENCIES & PACKAGES
+# ==========================================
+# Node / Frontend / Backend JS
+node_modules/
+jspm_packages/
+.pnp
+.pnp.js
+
+# Python Backend
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+
+# Java / Maven / Gradle Backend
+.gradle/
+build/
+target/
+*.class
+*.jar
+*.war
+
+# ==========================================
+# 🚀 BUILD & OUTPUTS
+# ==========================================
+# Frontend builds (CRA, Vite, Next.js, Nuxt)
+dist/
+build/
+.next/
+.nuxt/
+out/
+.docusaurus/
+.cache/
+
+# ==========================================
+# ⚙️ OPERATING SYSTEM & IDEs
+# ==========================================
+# OS generated files
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editors (VS Code, WebStorm, PyCharm, IntelliJ)
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# ==========================================
+# 📊 LOGS, DIAGNOSTICS, & TESTING
+# ==========================================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log*
+coverage/
+.nyc_output/
+.cypress/
+
+# ==========================================
+# 🐳 DOCKER & CONTAINERIZATION
+# ==========================================
+.docker/
+docker-compose.override.yml
